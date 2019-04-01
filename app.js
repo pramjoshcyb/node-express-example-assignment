@@ -56,8 +56,43 @@ app.get('/people', (req, res) => {
     "<img src='http://telstra.com.au/myimg.png'>");
 });
 
-app.post('/report', (req, res) => {
+let unique = 1;
+
+function createLog(report) {
+    let id = unique;
+    unique++;
+
+    const violatedDirective = report["violated-directive"];
+
+    //id, date, severity
+
+    let severity = 'unknown';
+    if (violatedDirective == 'style-src') {
+        severity = "moderate";
+    } else if (violatedDirective == 'script-src') {
+        severity = "high";
+    }
+
+    const newLog = {
+        id:         id,
+        severity:   severity,
+        reportType: violatedDirective,
+        timestamp:  Math.floor(new Date().getTime() / 1000)
+    };
+
+    return newLog;
+
+}
+// route
+// handles post requests to any url
+app.post('/*', (req, res) => {
     console.log(req.body);
+
+    // handle the report in some way
+    const report = req.body["csp-report"];
+
+    createLog? sort of probably
+
     res.end();
     //res.send('hello world');
 });
