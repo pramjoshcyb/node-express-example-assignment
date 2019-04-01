@@ -10,11 +10,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on ${port}`);
-}); 
+});
 
 /* BODY PARSER MIDDLEWARE */
 // handle parsing json content
 app.use(bodyParser.json());
+app.use(bodyParser.json({type: 'application/csp-report'}));
 // handle parsing urlencoded content [extended explained here: https://www.npmjs.com/package/body-parser#extended]
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -48,7 +49,16 @@ app.get('/goodbye', (req, res) => {
 });
 
 app.get('/people', (req, res) => {
-    res.header('Content-Security-Policy', 'img-src     \'self\';')
-    res.send("<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Flowchart_showing_Simple_and_Preflight_XHR.svg/768px-Flowchart_showing_Simple_and_Preflight_XHR.svg.png' alt='mixed'>");
+    res.header('Content-Security-Policy', "img-src \'self\'; report-uri /report")
+    res.send("Some sample text!! <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Flowchart_showing_Simple_and_Preflight_XHR.svg/768px-Flowchart_showing_Simple_and_Preflight_XHR.svg.png' alt='mixed'>" +
+
+
+    "<img src='http://telstra.com.au/myimg.png'>");
+});
+
+app.post('/report', (req, res) => {
+    console.log(req.body);
+    res.end();
+    //res.send('hello world');
 });
 
