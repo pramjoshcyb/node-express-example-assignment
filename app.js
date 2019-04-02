@@ -91,7 +91,7 @@ app.post('/*', (req, res) => {
     // handle the report in some way
     const report = req.body["csp-report"];
 
-    createLog? sort of probably
+    //createLog? sort of probably
 
     res.end();
     //res.send('hello world');
